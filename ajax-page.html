@@ -9,8 +9,17 @@ Dynamically load and inject page content using XHR
     // in index.html
     <ajax-page></ajax-page>
     <div id="ajax-container"></div>
+    <button onclick="changePage();"></button>
 
-    // in foo.html
+    <script>
+      var aPage = document.querySelector('ajax-page');
+
+      function changePage() {
+        aPage.route = 'pages/foo.html';
+      }
+    </script>
+
+    // in pages/foo.html
     <div id="ajax-target">
       <h1>Hello from foo.html
     </div>
@@ -58,6 +67,16 @@ You may wish to manipulate the content of the loaded page before attaching it to
        * @default '#ajax-target'
        */
       target: '#ajax-target',
+
+      /**
+       * The route to load content from
+       *
+       * @attribute route
+       * @type string
+       * @default null
+       */
+      route: null,
+
       ready: function() {
         this.containerEl_ = document.querySelector(this.container);
       },
