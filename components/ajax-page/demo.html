@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <title>ajax-page Demo</title>
+
+  <script src="../webcomponentsjs/webcomponents.js"></script>
+  <link rel="import" href="ajax-page.html">
+
+</head>
+<body unresolved>
+
+  <p>An `ajax-page` looks like this:</p>
+
+  <ajax-page></ajax-page>
+  <div id="ajax-container"></div>
+  <button onclick="changePage('pages/foo.html');">Go to foo</button>
+  <button onclick="changePage('pages/bar.html');">Go to bar</button>
+
+  <script>
+    var aPage = document.querySelector('ajax-page');
+    aPage.onLoad = function(doc, route) {
+      if (route == 'pages/bar.html') {
+        doc.querySelector('#ajax-target h1')
+          .textContent = 'This is modified content from bar.html';
+      }
+    };
+
+    function changePage(route) {
+      aPage.route = route;
+    }
+  </script>
+
+</body>
+</html>
