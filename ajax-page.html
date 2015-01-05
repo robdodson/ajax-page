@@ -2,18 +2,37 @@
 <link rel="import" href="../core-ajax/core-ajax.html">
 
 <!--
-Element providing solution to no problem in particular.
+Dynamically load and inject page content using XHR
 
 ##### Example
 
+    // in index.html
     <ajax-page></ajax-page>
+    <div id="ajax-container"></div>
+
+    // in foo.html
+    <div id="ajax-target">
+      <h1>Hello from foo.html
+    </div>
+
+You may wish to manipulate the content of the loaded page before attaching it to the DOM. Override the `onLoad` method to access the loaded document and the current route.
+
+##### Example
+
+    var aPage = document.querySelector('ajax-page');
+    aPage.onLoad = function(doc, route) {
+      if (route == 'pages/bar.html') {
+        doc.querySelector('#ajax-target h1')
+          .textContent = 'This is modified content from bar.html';
+      }
+    };
 
 @element ajax-page
-@blurb Element providing solution to no problem in particular.
+@blurb Dynamically load and inject page content using XHR
 @status alpha
-@homepage http://polymerlabs.github.io/ajax-page
+@homepage http://robdodson.github.io/ajax-page
 -->
-<polymer-element name="ajax-page" attributes="route">
+<polymer-element name="ajax-page" attributes="container target route">
   <template>
     <core-ajax id="ajax" url="{{route}}"
                handleAs="document" on-core-response="{{onResponse}}">
@@ -22,7 +41,22 @@ Element providing solution to no problem in particular.
   <script>
 
     Polymer({
+      /**
+       * A CSS selector for the element whose content will be replaced
+       *
+       * @attribute container
+       * @type string
+       * @default '#ajax-container'
+       */
       container: '#ajax-container',
+
+      /**
+       * A CSS selector for the content to be injected into the page
+       *
+       * @attribute container
+       * @type string
+       * @default '#ajax-container'
+       */
       target: '#ajax-target',
       ready: function() {
         this.containerEl_ = document.querySelector(this.container);
