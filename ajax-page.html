@@ -1,0 +1,63 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../core-ajax/core-ajax.html">
+
+<!--
+Element providing solution to no problem in particular.
+
+##### Example
+
+    <ajax-page></ajax-page>
+
+@element ajax-page
+@blurb Element providing solution to no problem in particular.
+@status alpha
+@homepage http://polymerlabs.github.io/ajax-page
+-->
+<polymer-element name="ajax-page" attributes="route">
+  <template>
+    <core-ajax id="ajax" url="{{route}}"
+               handleAs="document" on-core-response="{{onResponse}}">
+    </core-ajax>
+  </template>
+  <script>
+
+    Polymer({
+      container: '#ajax-container',
+      target: '#ajax-target',
+      ready: function() {
+        this.containerEl_ = document.querySelector(this.container);
+      },
+      routeChanged: function() {
+        this.$.ajax.go();
+      },
+      onLoad: function(doc) {
+        // override with your own impl
+        // use onLoad to manipulate the loaded doc before
+        // it's added to your page
+      },
+      onResponse: function(e, detail) {
+        var doc = detail.response;
+
+        try {
+          this.onLoad(doc, this.route);
+        } catch (err) {
+          return console.error('ajax-page onLoad failed', err);
+        }
+
+        this.empty_();
+        this.inject_(doc);
+      },
+      empty_: function() {
+        while(this.containerEl_.firstElement) {
+          this.containerEl_.removeChild(firstElement);
+        }
+      },
+      inject_: function(doc) {
+        var fragment = doc.querySelector(this.target);
+        this.injectBoundHTML(fragment.innerHTML, this.containerEl_);
+      }
+    });
+
+  </script>
+
+</polymer-element>
