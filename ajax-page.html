@@ -83,7 +83,7 @@ You may wish to manipulate the content of the loaded page before attaching it to
       routeChanged: function() {
         this.$.ajax.go();
       },
-      onLoad: function(doc) {
+      onLoad: function(doc, route) {
         // override with your own impl
         // use onLoad to manipulate the loaded doc before
         // it's added to your page
